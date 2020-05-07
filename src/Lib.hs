@@ -19,7 +19,7 @@ import qualified Linear as LM
 import qualified Linear.V as LM
 import qualified Linear.Matrix as LM
 import qualified Data.Vector as V
-import LAoP.Utils
+import LAoP.Utils hiding ((.))
 
 randomMatrixHM :: Int -> Int -> Gen (HM.Matrix Double)
 randomMatrixHM cols rows = do
@@ -180,6 +180,66 @@ setupEnv6 = do
    ,(tm11, tm12)
          )
 
+setupEnv7 = do
+  -- HMatrix
+  hm11 <- generate (resize 1 (randomMatrixHM 400 400))
+  hm12 <- generate (resize 1 (randomMatrixHM 400 400))
+  -- Matrix
+  dm11 <- generate (resize 1 (randomMatrixDM 400 400))
+  dm12 <- generate (resize 1 (randomMatrixDM 400 400))
+  -- Linear
+  lm11 <- generate (resize 1 (randomMatrixLM @400 @400))
+  lm12 <- generate (resize 1 (randomMatrixLM @400 @400))
+  -- Laop
+  tm11 <- generate (resize 1 (randomMatrixTM @(Natural 0 400) @(Natural 0 400)))
+  tm12 <- generate (resize 1 (randomMatrixTM @(Natural 0 400) @(Natural 0 400)))
+  return (
+   (hm11, hm12)
+   ,(dm11, dm12)
+   ,(lm11, lm12)
+   ,(tm11, tm12)
+         )
+
+setupEnv8 = do
+  -- HMatrix
+  hm11 <- generate (resize 1 (randomMatrixHM 800 800))
+  hm12 <- generate (resize 1 (randomMatrixHM 800 800))
+  -- Matrix
+  dm11 <- generate (resize 1 (randomMatrixDM 800 800))
+  dm12 <- generate (resize 1 (randomMatrixDM 800 800))
+  -- Linear
+  lm11 <- generate (resize 1 (randomMatrixLM @800 @800))
+  lm12 <- generate (resize 1 (randomMatrixLM @800 @800))
+  -- Laop
+  tm11 <- generate (resize 1 (randomMatrixTM @(Natural 0 800) @(Natural 0 800)))
+  tm12 <- generate (resize 1 (randomMatrixTM @(Natural 0 800) @(Natural 0 800)))
+  return (
+   (hm11, hm12)
+   ,(dm11, dm12)
+   ,(lm11, lm12)
+   ,(tm11, tm12)
+         )
+
+setupEnv9 = do
+  -- HMatrix
+  hm11 <- generate (resize 1 (randomMatrixHM 1600 1600))
+  hm12 <- generate (resize 1 (randomMatrixHM 1600 1600))
+  -- Matrix
+  dm11 <- generate (resize 1 (randomMatrixDM 1600 1600))
+  dm12 <- generate (resize 1 (randomMatrixDM 1600 1600))
+  -- Linear
+  lm11 <- generate (resize 1 (randomMatrixLM @1600 @1600))
+  lm12 <- generate (resize 1 (randomMatrixLM @1600 @1600))
+  -- Laop
+  tm11 <- generate (resize 1 (randomMatrixTM @(Natural 0 1600) @(Natural 0 1600)))
+  tm12 <- generate (resize 1 (randomMatrixTM @(Natural 0 1600) @(Natural 0 1600)))
+  return (
+   (hm11, hm12)
+   ,(dm11, dm12)
+   ,(lm11, lm12)
+   ,(tm11, tm12)
+         )
+
 benchmark :: IO ()
 benchmark = do
   print "Starting benchmarks..."
@@ -225,4 +285,26 @@ benchmark = do
    , bench "matrix" $ nf (DM.multStd2 dm11) dm12
    , bench "linear" $ nf (LM.!*! lm11) lm12
    , bench "laop" $ nf (TM.comp tm11) tm12
-   ] ] ]
+   ] ],
+   env setupEnv7 $ \ ~((hm11, hm12), (dm11, dm12), (lm11, lm12), (tm11, tm12)) -> bgroup "Matrix Composition 7" [
+   bgroup "400x400" [
+     bench "hmatrix" $ nf (HM.mul hm11) hm12
+   , bench "matrix" $ nf (DM.multStd2 dm11) dm12
+   , bench "linear" $ nf (LM.!*! lm11) lm12
+   , bench "laop" $ nf (TM.comp tm11) tm12
+   ] ],
+   env setupEnv8 $ \ ~((hm11, hm12), (dm11, dm12), (lm11, lm12), (tm11, tm12)) -> bgroup "Matrix Composition 8" [
+   bgroup "800x800" [
+     bench "hmatrix" $ nf (HM.mul hm11) hm12
+   , bench "matrix" $ nf (DM.multStd2 dm11) dm12
+   , bench "linear" $ nf (LM.!*! lm11) lm12
+   , bench "laop" $ nf (TM.comp tm11) tm12
+   ] ],
+   env setupEnv9 $ \ ~((hm11, hm12), (dm11, dm12), (lm11, lm12), (tm11, tm12)) -> bgroup "Matrix Composition 9" [
+   bgroup "1600x1600" [
+     bench "hmatrix" $ nf (HM.mul hm11) hm12
+   , bench "matrix" $ nf (DM.multStd2 dm11) dm12
+   , bench "linear" $ nf (LM.!*! lm11) lm12
+   , bench "laop" $ nf (TM.comp tm11) tm12
+   ] ]
+              ]
