@@ -12,12 +12,12 @@ packages:
   original:
     hackage: bed-and-breakfast-0.5@sha256:02b7f3f18b23f97cf70782f09bed746ecad751f331121a3a43fe97880c25fbce,1597
 - completed:
-    hackage: laop-0.1.0.4@sha256:c28f4f8ab1fe218579daba8380064361f05547a42450f71118b14db04d469f54,1838
+    hackage: laop-0.1.0.7@sha256:80f6a97c9fd3006ef08b0a77cac6b5d2c7f116c8c5d4f3464d35902507aa0c1c,1889
     pantry-tree:
-      size: 1101
-      sha256: 9fc88866de0671acef13dea02f4b9f242bb485f6631e65643b7eae4a6ad57d7c
+      size: 877
+      sha256: 4ae5eed5fac2398bf28bc6bcd927870f9e3bf5072a5079a44fd99ed05be73501
   original:
-    hackage: laop-0.1.0.4@sha256:c28f4f8ab1fe218579daba8380064361f05547a42450f71118b14db04d469f54,1838
+    hackage: laop-0.1.0.7
 snapshots:
 - completed:
     size: 524163
